@@ -22,12 +22,17 @@ class _MyHomePageState extends State<WelcomeScreen> {
   String check = '';
 
   void store_qr_data() {
+    print("Store qr data was called");
     if (QrScan.res != null) {
+      print("QrScan res is not empty");
+      print("Value of QrScan.res: ${QrScan.res}");
       String? result = QrScan.res!.code;
       jsonQrData = jsonDecode(result!);
       Serialize().storeData(jsonQrData);
       check = "Qr data was not empty and is stored succesfully";
     } else {
+      print("QrScan res is empty");
+      print("Value of QrScan.res: ${QrScan.res}");
       check = "Qr data was empty";
     }
   }
