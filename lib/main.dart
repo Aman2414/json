@@ -1,75 +1,84 @@
 import 'package:flutter/material.dart';
-import 'package:json/datafile.dart';
-import 'package:json/serialization.dart';
+import 'package:json/qr_scan_page.dart';
+import 'package:json/welcome_screen.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  int pageIndex = 0;
+
+  final pages = [
+    const WelcomeScreen(),
+    const QrScan(),
+  ];
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: MyHomePage(),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  @override
-  void initState() {
-    super.initState();
-    print("Calling serialize");
-    Serialize();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Data.jsonMap != [{}]
-          ? ListView.builder(
-              shrinkWrap: true,
-              itemCount: Data.jsonMap.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        children: [
-                          Text(
-                            Data.jsonMap[index]['date'],
-                          ),
-                          Text(
-                            Data.jsonMap[index]['title'],
-                          ),
-                        ],
+      home: Scaffold(
+        body: pages[pageIndex],
+        bottomNavigationBar: Container(
+          height: 60,
+          decoration: BoxDecoration(
+            color: Theme.of(context).primaryColor,
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
+            ),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              IconButton(
+                onPressed: () {
+                  setState(() {
+                    pageIndex = 0;
+                  });
+                },
+                icon: pageIndex == 0
+                    ? Icon(
+                        Icons.home_filled,
+                        color: Colors.white,
+                        size: 35,
+                      )
+                    : Icon(
+                        Icons.home_outlined,
+                        color: Colors.black,
+                        size: 35,
                       ),
-                      Column(
-                        children: [
-                          Text(
-                            Data.jsonMap[index]['amount'],
-                          ),
-                          Text(
-                            Data.jsonMap[index]['merchant'],
-                          ),
-                        ],
+              ),
+              IconButton(
+                onPressed: () {
+                  setState(() {
+                    pageIndex = 1;
+                  });
+                },
+                icon: pageIndex == 1
+                    ? Icon(
+                        Icons.qr_code_scanner_rounded,
+                        color: Colors.white,
+                        size: 35,
+                      )
+                    : Icon(
+                        Icons.qr_code_scanner_rounded,
+                        color: Colors.black,
+                        size: 35,
                       ),
-                    ],
-                  ),
-                );
-              })
-          : Text("NO DATA"),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
