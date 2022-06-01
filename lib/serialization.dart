@@ -7,13 +7,7 @@ class Serialize {
   static Map<String, dynamic> jsonNewData = {};
   static String storagedata = '';
   static String newstoragedata = '';
-  static List<dynamic> jsonData = [
-    {"title": "res1", "amount": "350", "merchant": "UPI", "date": "jan 5 2022"},
-    {"title": "res2", "amount": "350", "merchant": "UPI", "date": "jan 5 2022"},
-    {"title": "res3", "amount": "350", "merchant": "UPI", "date": "jan 5 2022"},
-    {"title": "res4", "amount": "350", "merchant": "UPI", "date": "jan 5 2022"},
-    {"title": "res5", "amount": "350", "merchant": "UPI", "date": "jan 5 2022"},
-  ];
+  static List<dynamic> jsonData = [];
 
   storeData(dynamic newdata) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -25,7 +19,7 @@ class Serialize {
       if (storagedata == "" || jsonMap.isEmpty) {
         print("Current storage is empty so storing newdata directly");
         print("Storing the data : $newdata in storage");
-        jsonMap = newdata;
+        jsonMap.add(newdata);
         print("Value of jsonMap : $jsonMap");
         prefs.setString(key, jsonEncode(newdata));
         print("Data stored successfully");
@@ -35,7 +29,7 @@ class Serialize {
         jsonMap = jsonDecode(storagedata);
         print("jsonNewData value: $newdata");
         print("jsonMap before adding $jsonMap");
-        jsonMap.add(newdata);
+        jsonMap = newdata;
         print("jsonMap after adding$jsonMap");
         print("New data added");
         newstoragedata = jsonEncode(jsonMap);
@@ -46,5 +40,6 @@ class Serialize {
       print(
           "New Data that is passed to function is Empty so it can't be stored");
     }
+
   }
 }
