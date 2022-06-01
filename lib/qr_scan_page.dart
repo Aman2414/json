@@ -1,11 +1,11 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:json/serialization.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class QrScan extends StatefulWidget {
+  static Barcode? res;
+
   const QrScan({Key? key}) : super(key: key);
 
   @override
@@ -14,10 +14,8 @@ class QrScan extends StatefulWidget {
 
 class _QrScanState extends State<QrScan> {
   final qrKey = GlobalKey(debugLabel: 'QR');
-  Barcode? barcode;
+  static Barcode? barcode;
   QRViewController? controller;
-  String? res;
-  static Map<String, dynamic> jsonQrData = {};
 
   @override
   void dispose() {
@@ -28,17 +26,10 @@ class _QrScanState extends State<QrScan> {
   @override
   void reassemble() async {
     super.reassemble();
-
     if (Platform.isAndroid) {
       await controller!.pauseCamera();
     }
     controller!.resumeCamera();
-  }
-
-  void store_qr_data() {
-    res = barcode!.code;
-    jsonQrData = jsonDecode(res!);
-    Serialize().storeData(jsonQrData);
   }
 
   @override
@@ -62,6 +53,9 @@ class _QrScanState extends State<QrScan> {
                         barcode != null
                             ? "Result : ${barcode!.code}"
                             : "Scan a code",
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
                       ),
                       Text(
                         "",
@@ -88,12 +82,17 @@ class _QrScanState extends State<QrScan> {
       );
 
   void onQRViewCreated(QRViewController controller) {
-    setState(() {
-      this.controller = controller;
+    this.controller = controller;
+    // setState(() => this.controller = controller);
+    controller.scannedDataStream.listen((scanData) {
+      setState(() {
+        barcode = scanData;
+        QrScan.res = scanData;
+      });
     });
-    controller.scannedDataStream.listen((event) => setState(() {
-          barcode = event;
-          store_qr_data();
-        }));
+    //
+    // setState(() {
+    //   store_qr_data();
+    // });
   }
 }
