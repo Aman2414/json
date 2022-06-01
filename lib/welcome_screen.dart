@@ -13,10 +13,6 @@ class WelcomeScreen extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<WelcomeScreen> {
-  TextEditingController date = TextEditingController();
-  TextEditingController title = TextEditingController();
-  TextEditingController amount = TextEditingController();
-  TextEditingController merchant = TextEditingController();
   late SharedPreferences prefs;
   static Map<String, dynamic> jsonQrData = {};
   String check = '';
@@ -72,74 +68,6 @@ class _MyHomePageState extends State<WelcomeScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-              child: Column(
-                children: [
-                  TextField(
-                    controller: date,
-                    decoration: InputDecoration(
-                      hintText: "Enter Date",
-                    ),
-                  ),
-                  TextField(
-                    controller: title,
-                    decoration: InputDecoration(
-                      hintText: "Enter Title",
-                    ),
-                  ),
-                  TextField(
-                    controller: amount,
-                    decoration: InputDecoration(
-                      hintText: "Enter Amount",
-                    ),
-                  ),
-                  TextField(
-                    controller: merchant,
-                    decoration: InputDecoration(
-                      hintText: "Enter Merchant",
-                    ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      if (date.text.isNotEmpty &&
-                          title.text.isNotEmpty &&
-                          amount.text.isNotEmpty &&
-                          merchant.text.isNotEmpty) {
-                        Serialize.jsonNewData = {
-                          "title": title.text,
-                          "amount": amount.text,
-                          "merchant": merchant.text,
-                          "date": date.text,
-                        };
-
-                        setState(() {
-                          var isPresent = false;
-                          for (var i = 0; i < Serialize.jsonMap.length; i++) {
-                            if (Serialize.jsonMap[i]['title'] !=
-                                Serialize.jsonNewData['title']) {
-                              print("Data is not same so adding it in storage");
-                            } else {
-                              isPresent = true;
-                              print(
-                                  "jsonMap already contains the new data that is given");
-                            }
-                          }
-
-                          if (!isPresent) {
-                            Serialize().storeData(Serialize.jsonNewData);
-                          }
-                        });
-                      }
-                    },
-                    child: Text("Submit"),
-                  ),
-                  Text(
-                    check,
-                  ),
-                ],
-              ),
-            ),
             Container(
               width: double.infinity,
               child: Serialize.jsonMap.isNotEmpty
@@ -200,7 +128,7 @@ class _MyHomePageState extends State<WelcomeScreen> {
                       height: 100,
                       width: 10,
                       child: CircularProgressIndicator(),
-                    ),
+              ),
             ),
           ],
         ),

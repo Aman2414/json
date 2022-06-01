@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:json/data_input.dart';
 import 'package:json/qr_scan_page.dart';
 import 'package:json/welcome_screen.dart';
 
@@ -19,6 +20,7 @@ class _MyAppState extends State<MyApp> {
   final pages = [
     const WelcomeScreen(),
     const QrScan(),
+    const DataEntry(),
   ];
 
   @override
@@ -71,6 +73,24 @@ class _MyAppState extends State<MyApp> {
                       )
                     : Icon(
                         Icons.qr_code_scanner_rounded,
+                        color: Colors.black,
+                        size: 35,
+                      ),
+              ),
+              IconButton(
+                onPressed: () {
+                  setState(() {
+                    pageIndex = 2;
+                  });
+                },
+                icon: pageIndex == 2
+                    ? Icon(
+                        Icons.settings,
+                        color: Colors.white,
+                        size: 35,
+                      )
+                    : Icon(
+                        Icons.settings,
                         color: Colors.black,
                         size: 35,
                       ),
