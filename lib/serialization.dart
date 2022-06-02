@@ -9,6 +9,7 @@ class Serialize {
   static String newstoragedata = '';
   static List<dynamic> jsonData = [];
 
+
   storeData(dynamic newdata) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     print("Storing data called");
